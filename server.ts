@@ -6,11 +6,14 @@ import { WebSocketServer } from "ws"
 import { ClientSocket, DataType, SocketState } from "./constants/data-type";
 import { BroadcastHandler } from "./utils/broadcast-handler";
 import cors from "cors"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 // Http server creation
 const app = express()
 app.use(cors({
-    'origin': ['http://localhost:3000'],
+    'origin': process.env.ALLOW_ORIGINS,
     'credentials': true,
     'allowedHeaders': ['Authorization', 'Content-Type']
 }))
