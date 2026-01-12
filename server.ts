@@ -12,24 +12,26 @@ dotenv.config()
 
 // Http server creation
 const app = express()
-const whiteListedUrls = process.env.ALLOWED_ORIGINS_LIST 
-  ? process.env.ALLOWED_ORIGINS_LIST.split(',').map(origin => origin.trim()) 
-  : [];
+const whiteListedUrls = process.env.ALLOWED_ORIGINS_LIST
+    ? process.env.ALLOWED_ORIGINS_LIST.split(',').map(origin => origin.trim())
+    : [];
 
 function originChecker(origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
-  // Allow requests with no origin (e.g., curl, Postman, server-side calls)
-  if (!origin || whiteListedUrls.indexOf(origin) !== -1) {
-    callback(null, true);
-  } else {
-    callback(new Error('Not allowed by CORS'));
-  }
-}   
+    // Allow requests with no origin (e.g., curl, Postman, server-side calls)
+    if (!origin) return callback(null, true);
+
+    if (whiteListedUrls.includes(origin)) {
+        callback(null, true);
+    } else {
+        callback(new Error('Not allowed by CORS'));
+    }
+}
 
 app.use(cors({
-  origin: originChecker,
-  credentials: true,
-  allowedHeaders: ['Authorization', 'Content-Type']
-}));   
+    origin: originChecker,
+    credentials: true,
+    allowedHeaders: ['Authorization', 'Content-Type']
+}));
 
 app.use(express.json({ limit: "100mb" }))
 
