@@ -49,6 +49,11 @@ export interface LatencyPingDataExchangeFormat extends GenericDataExchangeFormat
     timestamp: number
 }
 
+export interface LatencyPongDataExchangeFormat extends GenericDataExchangeFormat {
+    userId: string
+    timestamp: number
+}
+
 export interface MemberDisconnectionDataExchangeFormat extends GenericDataExchangeFormat {
     userId: string
     message: string

@@ -1,5 +1,5 @@
 import { WebSocket } from "ws"
-import { ChatMessageDataExchangeFormat, ClientSocket, DataType, LatencyPingDataExchangeFormat, MemberDisconnectionDataExchangeFormat, NewMemberEventDataExchangeFormat, UserInitDataExchangeFormat } from "../constants/data-type"
+import { ChatMessageDataExchangeFormat, ClientSocket, DataType, LatencyPingDataExchangeFormat, LatencyPongDataExchangeFormat, MemberDisconnectionDataExchangeFormat, NewMemberEventDataExchangeFormat, UserInitDataExchangeFormat } from "../constants/data-type"
 import { uncSpells } from "../constants/spells"
 import { elementalCallRegex, executeSpellRegex } from "../constants/regex"
 import { logger } from "../server"
@@ -164,11 +164,13 @@ export class BroadcastHandler {
 
         const cws = room.users.get(data.userId)
         if (!cws) return
-
-        cws.send(JSON.stringify({
+        const newData: LatencyPongDataExchangeFormat = {
             type: DataType.LATENCY_PONG,
+            roomId: data.roomId,
+            userId: data.userId,
             timestamp: data.timestamp
-        }))
+        }
+        cws.send(JSON.stringify(newData))
     }
 
     public sendPing() {
