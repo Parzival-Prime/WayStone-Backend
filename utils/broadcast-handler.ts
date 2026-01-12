@@ -153,7 +153,7 @@ export class BroadcastHandler {
 
     }
 
-    public handleLatencyPing(data: LatencyPingDataExchangeFormat) {
+    public handleLatencyPing(data: LatencyPingDataExchangeFormat) { 
         if (!data.timestamp || typeof data.timestamp !== "number") {
             logger.warn("Invalid latency ping")
             return
